@@ -5,11 +5,16 @@ from affiche import Affiche
 from users import Users
 from user import User
 
+# TODO : 
+# - epreuve scytale (3)
+# - ajouter des commandes pour administrateur
+# - renvoyer la solution incorrecte ou correcte
+
 affiches = [
     Affiche("0", ["ressources/epreuves/affiche_0.jpg"], "la guerre des gaules", ["miroir miroir", "sens de lecture"]),
     Affiche("1", ["ressources/epreuves/affiche_1.jpg"], "le concile de troyes", ["comme César"]),
     Affiche("2", ["ressources/epreuves/affiche_2.jpg"], "spartacus", ["le première lettre est un s"]),
-    Affiche("3", ["ressources/epreuves/affiche_3.jpg"], "france"),
+    Affiche("3", ["ressources/epreuves/affiche_3.jpg"], "france", None, "Distanciel oblige, vous devrez utiliser le site dcode : https://www.dcode.fr/chiffre-scytale pour cette épreuve.\nLe message chiffré retrouvé est : xxx (taper france pour l'instant)"),
     Affiche("4", ["ressources/epreuves/affiche_4.jpg"], "vigenere", ["le clair v avec la sous clé t donne z"]),
     Affiche("5", ["ressources/epreuves/affiche_5.jpg"], "de componendis cifris cyphris", ["un chiffre pour une lettre"]),
     Affiche("6", ["ressources/epreuves/affiche_6.jpg"], "offensive du printemps", ["le décalage de départ est de 0"]),
