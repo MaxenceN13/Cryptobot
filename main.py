@@ -4,35 +4,18 @@ import os
 from affiche import Affiche
 from users import Users
 from user import User
+from cte import affiches
+from unidecode import unidecode
 
 # TODO : 
-# - epreuve scytale (3)
-# - ajouter des commandes pour administrateur
-# - renvoyer la solution incorrecte ou correcte
+# - epreuve scytale (3) et disque alberti (6)
+# - ajouter des commandes pour administrateur (!save, !reset, !ban, !unban)
+# - filtre anti-spam
+# - épreuve 7 faire des sons pour la commande !frequence
+# - faire un pool, et le rappeler pour les personnes qui terminent l'aventure
+# - gérer les épreuves pré-évenements
 
-affiches = [
-    Affiche("0", ["ressources/epreuves/affiche_0.jpg"], "la guerre des gaules", ["miroir miroir", "sens de lecture"]),
-    Affiche("1", ["ressources/epreuves/affiche_1.jpg"], "le concile de troyes", ["comme César"]),
-    Affiche("2", ["ressources/epreuves/affiche_2.jpg"], "spartacus", ["le première lettre est un s"]),
-    Affiche("3", ["ressources/epreuves/affiche_3.jpg"], "france", None, "Distanciel oblige, vous devrez utiliser le site dcode : https://www.dcode.fr/chiffre-scytale pour cette épreuve.\nLe message chiffré retrouvé est : xxx (taper france pour l'instant)"),
-    Affiche("4", ["ressources/epreuves/affiche_4.jpg"], "vigenere", ["le clair v avec la sous clé t donne z"]),
-    Affiche("5", ["ressources/epreuves/affiche_5.jpg"], "de componendis cifris cyphris", ["un chiffre pour une lettre"]),
-    Affiche("6", ["ressources/epreuves/affiche_6.jpg"], "offensive du printemps", ["le décalage de départ est de 0"]),
-    Affiche("7", ["ressources/epreuves/affiche_7.jpg"], ["91.4"], ["e=5 et pi=3.14"], "Donner moi la fréquence radio avec la commande solution pour retrouver le message chiffré."),
-    Affiche("7b", ["ressources/epreuves/affiche_7.jpg"]), 
-    Affiche("8", ["ressources/epreuves/affiche_8.jpg"], ["enseignant chercheur"], ["chaque cycle est composé de 4 lettres (1ère ligne, 2ème ligne, 3ème ligne, 2ème ligne)", "la taille du message est de 19 lettres, 19//4=4 cycles et reste 3", "premier ligne \"einee\""]),
-    Affiche("9", ["ressources/epreuves/affiche_9.jpg"], texte = "**Dis moi `!solution suivant` pour passer à la prochaine fiche !**"),
-    Affiche("10", ["ressources/epreuves/affiche_10.jpg"], texte = "**Dis moi `!solution suivant` pour passer à la prochaine fiche !**"),
-    Affiche("11", ["ressources/epreuves/affiche_11.jpg"], ["polybe", "vercingetorix", "franc macon", "transposition"]),
-    Affiche("12", ["ressources/epreuves/affiche_12.jpg"]),
-]
-
-db_path = "users.json"
-
-users = Users()
-if os.path.exists(db_path):
-    users.load(db_path)
-
+users = None
 
 class MyClient(discord.Client):
     userchannel_public_feedback = None
@@ -55,13 +38,14 @@ class MyClient(discord.Client):
         
             print("{0.author.name} (#{0.author.id}) : {0.content}".format(message))
             
+            message.content = unidecode(message.content)
+
             # Lorsque c'est le premier message d'un utilisateur
             if not users.exist(message.author.id):
-                if message.content == "!start":
+                if message.content == "!start 1324":
                     new_user = User(message.author.id, message.author.name)
                     print("Nouvel utilisateur : {0.nom} (#{0.id})".format(new_user))
                     users.add(new_user)
-                    print(users)
                     await message.channel.send("Bonjour {0.author.mention}."\
                                             "\n\nBienvenue dans Cryptaventure ! Je serais ton guide dans cette aventure."\
                                             "\n\nPour commencer, voici comment communiquer avec moi :"\
@@ -76,16 +60,13 @@ class MyClient(discord.Client):
                     
                     # Sauvegarde des données
                     users.save(db_path)
-
-            elif users.get(message.author.id).affiche == len(affiches):
-                await message.channel.send("Tu as déjà terminé l'aventure !")
                 
-            else:
+            elif users.exist(message.author.id) and affiches[users.get(message.author.id).affiche].id != "fin":
                 user = users.get(message.author.id)
                 affiche = affiches[user.affiche]
 
                 if message.content == "!start":
-                    await message.channel.send("Tu as déjà commencé l'aventure, tu ne peux pas recommencer.")
+                    await message.channel.send("Tu as déjà commencé l'aventure, tu ne peux pas recommencer.\nFait `!resume` pour revoir l'affiche et les indices de l'épreuve courante.")
                 
                 elif message.content == "!help":
                     await message.channel.send("Voici comment communiquer avec moi :"\
@@ -113,27 +94,40 @@ class MyClient(discord.Client):
                     else:
                         await message.channel.send("Tu as déjà utilisé tous les indices.")
                 
-                elif message.content.startswith("!solution "):
-                    solution = message.content[10:].lower()
+                elif message.content.startswith("!solution ") or message.content == "!solution":
+                    solution = message.content[10:].lower().strip()
+                    # Remove accent
                     if solution == "":
                         await message.channel.send("Tu n'as pas proposé de solution.")
+
                     elif solution == affiche.solution:
-                        # Sauvegarde des données
-                        users.save(db_path)
                         
                         (temps_affiche, nb_indice) = user.nextAffiche()
+                        
+                        if affiche.solution != "suivant":
+                            await message.channel.send("Bravo ! Tu as trouvé la bonne solution avec {} indice(s) et en moins de {} minute(s).".format(nb_indice, temps_affiche))
+
                         affiche = affiches[user.affiche]
-                        
-                        await message.channel.send("Bravo ! Tu as trouvé la bonne solution avec {} indice(s) et en moins de {} minute(s).".format(nb_indice, temps_affiche))
-                        
-                        if user.affiche == len(affiches):
+
+                        if affiche.id == "vigenere":
                             (temps_total, nb_indice_total) = user.win()
-                            await message.channel.send("Félicitation, tu as terminé l'aventure !", file=discord.File(affiches[-1].paths[0]))
+                            await message.channel.send("Félicitation, tu as terminé l'aventure !", file=discord.File(affiche.paths[0]))
                             await self.userchannel_public_feedback.send("Un grand tonnerre d'applaudissement pour <@{}> qui a terminé l'aventure en moins de {} minutes(s) et avec {} indice(s).".format(message.author.id, temps_total, nb_indice_total))
                         else:
                             await self.send_affiche(message.channel, affiche)
+                        
+                        # Sauvegarde des données
+                        users.save(db_path)
                     else:
-                        await message.channel.send("Désolé, mais ce n'est pas la bonne solution.")
+                        await message.channel.send("Désolé, mais \"{}\" n'est pas la bonne solution.".format(solution))
+                
+                elif message.content.startswith("!frequence ") and affiche.id == "adfgvx":
+                    frequence = message.content[11:]
+                    if frequence == "91.4":
+                        await message.channel.send("DA GF GF VA FD GX XX VX VX GV AX VD FF GF XX GV XF VA")
+                    else:
+                        await message.channel.send("Désolé, mais \"{}\" n'est pas la bonne fréquence.".format(frequence))
+                    
 
     async def send_affiche(self, channel, affiche):
         await channel.send("Voici l'affiche :", file=discord.File(affiche.paths[0]))
@@ -150,8 +144,14 @@ class MyClient(discord.Client):
         user.indices_utilises[-1] += 1
         return indice
 
+if __name__ == "__main__":
+    db_path = "users.json"
 
-intents = discord.Intents.default()
-intents.message_content = True
-client = MyClient(intents=intents)
-client.run('MTA5NTU5Mzc0MjI5NzIyMzE4OQ.GBTzzc.qUvicVFy2YDxVhyFo6tqXJ8UVtX3-P7fnzqq1s')
+    users = Users()
+    if os.path.exists(db_path):
+        users.load(db_path)
+
+    intents = discord.Intents.default()
+    intents.message_content = True
+    client = MyClient(intents=intents)
+    client.run('MTA5NTU5Mzc0MjI5NzIyMzE4OQ.GBTzzc.qUvicVFy2YDxVhyFo6tqXJ8UVtX3-P7fnzqq1s')

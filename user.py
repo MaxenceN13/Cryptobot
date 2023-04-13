@@ -22,7 +22,8 @@ class User:
         return (round(temps_affiche/60.0, 2), self.indices_utilises[-2])
     
     def win(self):
-        return (round(self.date_validation_affiche[-1] - self.date_inscription/60.0, 2), sum(self.indices_utilises))
+        temps_total = self.date_validation_affiche[-1] - self.date_inscription
+        return (round(temps_total/60.0, 2), sum(self.indices_utilises))
                 
     def getNbIndiceCourant(self):
         return self.indices_utilises[-1]
