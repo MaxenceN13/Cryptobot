@@ -1,7 +1,7 @@
 class Affiche:
-    def __init__(self, id, paths = None, solution = None, indices = None, texte = None):
+    def __init__(self, id, paths = None, solution = None, hints = None, text = None):
         self.id = id
         self.paths = paths
         self.solution = solution
-        self.indices = indices
-        self.texte = texte
+        self.hints = hints
+        self.text = text

@@ -4,6 +4,7 @@ import jsonpickle
 class Users:
     def __init__(self):
         self.users = {}
+        self.save_path = None
     
     def add(self, user : User):
         self.users[user.id] = user
@@ -16,21 +17,23 @@ class Users:
             return self.users[user_id]
         return None
     
-    def exist(self, user_id):
+    def exists(self, user_id):
         return user_id in self.users.keys()
 
-    def save(self, path):
+    def save(self):
         users_json = jsonpickle.encode(self.users)
-        with open(path, "w") as file:
+        with open(self.save_path, "w") as file:
             file.write(users_json)
         
-    def load(self, path):
-        # key have to be int
-        # dictionary keys changed during iteration
-        with open(path, "r") as file:
+    def load(self):
+        with open(self.save_path, "r") as file:
             self.users = jsonpickle.decode(file.read())
+            # make copy of keys to avoid RuntimeError: dictionary changed during iteration
             for k in list(self.users.keys()):
                 self.users[int(k)] = self.users.pop(k)
+            
+    def setSavePath(self, path):
+        self.save_path = path
 
     def __str__(self):
         r = ""
