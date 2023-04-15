@@ -108,6 +108,9 @@ class MyClient(discord.Client):
                 await self.sendRun(user, message.channel)
 
             elif message.content == "!indice" and user.current_event_code != None:
+                current_run = events[user.getCurrentEvent()]["run"][user.getCurrentRun()]
+                if len(current_run.hints) == 0:
+                    await message.channel.send("Il n'y a aucun indice pour cette épreuve.")
                 hint = self.getNextHint(user)
                 if hint:
                     await message.channel.send("Voici l'indice : {}".format(hint))
@@ -273,14 +276,15 @@ class MyClient(discord.Client):
         if current_run.text:
             await channel.send(current_run.text)
         
-        if user.getNbHintUsed() == 0:
-            await channel.send("Tu n'as pas encore utilisé d'indice.\n")
-        else:
-            response = "Voici les indices que tu as déjà obtenus : "
-            for i in range(user.getNbHintUsed()):
-                response += "{}, ".format(current_run.hints[i])
-            response += "\n"
-            await channel.send(response)
+        if len(current_run.hints) > 0:
+            if user.getNbHintUsed() == 0:
+                await channel.send("Tu n'as pas encore utilisé d'indice.\n")
+            else:
+                response = "Voici les indices que tu as déjà obtenus : "
+                for i in range(user.getNbHintUsed()):
+                    response += "{}, ".format(current_run.hints[i])
+                response += "\n"
+                await channel.send(response)
 
     def getNextHint(self, user):
         current_run = events[user.getCurrentEvent()]["run"][user.getCurrentRun()]
