@@ -17,7 +17,7 @@ events = {
 
                         Affiche("templier", 
                                 ["ressources/images/affiche_2.jpg"], 
-                                "spartacus", 
+                                "spartiate", 
                                 ["le première lettre est un s"]),
 
                         Affiche("scytale", 
@@ -28,19 +28,19 @@ events = {
                         
                         Affiche("vigenere", 
                                 ["ressources/images/affiche_4.jpg", "ressources/images/affiche_4b.jpg"], 
-                                "vigenere", 
+                                "gisement", 
                                 ["le clair v avec la sous clé t donne z"]),
                         
                         Affiche("beale", 
                                 ["ressources/images/affiche_5.jpg",  "ressources/images/affiche_5b.jpg"], 
-                                "de componendis cifris cyphris", 
-                                ["un chiffre pour une lettre"]),
+                                "de componendis cyfris", 
+                                ["un nombre pour un mot", "la première lettre est le clair"]),
                         
                         Affiche("alberti", 
                                 ["ressources/images/affiche_6.jpg"], 
                                 "offensive du printemps", 
                                 ["le décalage de départ est de 0"], 
-                                "Distanciel oblige, vous devrez utiliser le site dcode : https://www.dcode.fr/alberti-cipher pour cette épreuve."),
+                                "Distanciel oblige, vous devrez utiliser le site dcode : https://www.dcode.fr/alberti-cipher pour cette épreuve.\nDisque exterieur : ABCDEFGILMNOPQRSTUVZ1234 ; Disque intérieur : acegklnprtvz&xysomqihfdb"),
                         
                         Affiche("adfgvx", 
                                 ["ressources/images/affiche_7.jpg", "ressources/images/affiche_7b.jpg"], 
@@ -77,7 +77,7 @@ events = {
                         
                         Affiche("epreuves_finales_3", 
                                 ["ressources/images/affiche_11.jpg"], 
-                                "polybe", 
+                                "carre de polybe", 
                                 [], 
                                 "Donne moi la réponse à l'épreuve d'en bas à gauche !"),
                         
