@@ -20,6 +20,7 @@ users = None
 
 class MyClient(discord.Client):
     userchannel_public_feedback = None
+    channel_feedback_miniepreuve = None
     maintenance = False
 
     def __init__(self, *args, **kwargs,):
@@ -27,6 +28,7 @@ class MyClient(discord.Client):
 
     async def on_ready(self):
         self.userchannel_public_feedback = self.get_channel(1095632033599979551)
+        self.channel_feedback_miniepreuve = self.get_channel(1097855112774422549)
         print('Logged in as')
         print(self.user.name)
         print(self.user.id)
@@ -164,7 +166,7 @@ class MyClient(discord.Client):
 
                 elif solution == "youtu.be/":
                     await message.channel.send("Bravo ! Tu as trouvé la bonne solution pour la mini-épreuve n°1.\nGarde bien cette solution pour la prochaine épreuve.")
-                    await self.userchannel_public_feedback.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve n°1.".format(message))
+                    await self.channel_feedback_miniepreuve.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve n°1.".format(message))
                     user.mini_epreuve[0] = 1
                     users.save()
                 else:
