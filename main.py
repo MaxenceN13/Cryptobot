@@ -87,24 +87,7 @@ class MyClient(discord.Client):
                             await self.sendRun(user, message.channel)
                 
             elif message.content == "!help":
-                if user and user.current_event_code != None:
-                    await message.channel.send(
-                        "Voici comment communiquer avec moi :"\
-                        "\n\t- `'!help'` pour revoir ces informations"\
-                        "\n\t- `'!resume'` pour revoir l'affiche et les indices de l'épreuve courante"\
-                        "\n\t- `'!indice'` pour obtenir un nouvel indice sur l'épreuve courante"\
-                        "\n\t- `'!solution [solution]'` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `\"!solution Master Cryptis\"`"
-                    )
-                else:
-                    await message.channel.send(
-                        "\n\nVoici comment communiquer avec moi :"\
-                        "\n\t- `'!start [code]'` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"\
-                        "\n\t- `'!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
-                        "\n\t- `'!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
-                        "\n\t- `'!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
-                        "\n\t- `'!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"\
-                        "\n\t- `'!help'` pour revoir ces informations"
-                    )
+                await message.channel.send(self.getHelp(user))
                     
             elif message.content == "!resume" and user.current_event_code != None:
                 await self.sendRun(user, message.channel)
@@ -267,6 +250,10 @@ class MyClient(discord.Client):
                         user.resetEvent(code)
                     await message.channel.send("L'événement {} a été réinitialisé.".format(events[code]["name"]))
                     users.save()
+            
+            else:
+                message.channel.send(self.getHelp(user))
+
 
 
     async def sendRun(self, user, channel):
@@ -296,6 +283,31 @@ class MyClient(discord.Client):
         hint = current_run.hints[user.getNbHintUsed()]
         user.useHint()
         return hint
+    
+    def getHelp(self, user):
+        if user and user.current_event_code != None:
+            return "Voici comment communiquer avec moi :"\
+                "\n\t- `'!help'` pour revoir ces informations"\
+                "\n\t- `'!resume'` pour revoir l'affiche et les indices de l'épreuve courante"\
+                "\n\t- `'!indice'` pour obtenir un nouvel indice sur l'épreuve courante"\
+                "\n\t- `'!solution [solution]'` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `\"!solution Master Cryptis\"`"
+        elif user and user.isAdmin():
+            return "Voici comment communiquer avec moi :"\
+                "\n\t- `'!help'` pour revoir ces informations"\
+                "\n\t- `'!ban [id]'` pour bannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `'!unban [id]'` pour débannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `'!show [id]'` pour afficher les informations d'un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `'!reset [id]'` pour réinitialiser un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `'!resetEvent [code]'` pour réinitialiser un événement (le code est le code de l'événement, par exemple `\"!resetEvent 1\"` pour réinitialiser l'événement 1)"
+
+        else:
+            return "\n\nVoici comment communiquer avec moi :"\
+                "\n\t- `'!start [code]'` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"\
+                "\n\t- `'!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
+                "\n\t- `'!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
+                "\n\t- `'!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
+                "\n\t- `'!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"\
+                "\n\t- `'!help'` pour revoir ces informations"
 
 if __name__ == "__main__":
     db_path = "users.json"
