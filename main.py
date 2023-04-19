@@ -252,7 +252,7 @@ class MyClient(discord.Client):
                     users.save()
             
             else:
-                message.channel.send(self.getHelp(user))
+                await message.channel.send(self.getHelp(user))
 
 
 
