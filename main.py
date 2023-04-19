@@ -65,10 +65,10 @@ class MyClient(discord.Client):
                         await message.channel.send("Bonjour {}."\
                                                 "\n\nBienvenue dans {} ! Je serais ton guide dans cette aventure."\
                                                 "\n\nPour commencer, voici comment communiquer avec moi :"\
-                                                "\n\t- `'!help'` pour revoir ces informations"\
-                                                "\n\t- `'!resume'` pour revoir l'affiche et les indices de l'épreuve courante"\
-                                                "\n\t- `'!indice'` pour obtenir un nouvel indice sur l'épreuve courante"\
-                                                "\n\t- `'!solution [solution]'` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `\"!solution Master Cryptis\"`"\
+                                                "\n\t- `!help` pour revoir ces informations"\
+                                                "\n\t- `!resume` pour revoir l'affiche et les indices de l'épreuve courante"\
+                                                "\n\t- `!indice` pour obtenir un nouvel indice sur l'épreuve courante"\
+                                                "\n\t- `!solution [solution]` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `!solution Master Cryptis`"\
                                                 "\nJe te conseille d'ouvir les images dans ton navigateur pour mieux les voir."\
                                                 "\n\n*Si vous avez un problème avec le bot, n'hésitez à contacter un administrateur.*".format(user.nom, events[code]["name"]))
                         user.startEvent(code)
@@ -285,32 +285,31 @@ class MyClient(discord.Client):
         return hint
     
     def getHelp(self, user):
-        help = ""
+        help = "Voici comment communiquer avec moi :"\
+                "\n\t- `!help` pour revoir ces informations"\
+                "\n\t- `!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
+                "\n\t- `!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
+                "\n\t- `!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
+                "\n\t- `!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"
+        
         if user and user.current_event_code != None:
-            help += "Voici comment communiquer avec moi :"\
-                "\n\t- `'!help'` pour revoir ces informations"\
-                "\n\t- `'!resume'` pour revoir l'affiche et les indices de l'épreuve courante"\
-                "\n\t- `'!indice'` pour obtenir un nouvel indice sur l'épreuve courante"\
-                "\n\t- `'!solution [solution]'` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `\"!solution Master Cryptis\"`"
+            help += "\n\t- `!start [code]` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"
+                
         
-        elif user and user.isAdmin():
-            help += "Voici les commandes administrateurs :"\
-                "\n\t- `'!help'` pour revoir ces informations"\
-                "\n\t- `'!ban [id]'` pour bannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `'!unban [id]'` pour débannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `'!show [id]'` pour afficher les informations d'un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `'!reset [id]'` pour réinitialiser un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `'!resetEvent [code]'` pour réinitialiser un événement (le code est le code de l'événement, par exemple `\"!resetEvent 1\"` pour réinitialiser l'événement 1)"
+        if user and user.current_event_code != None:
+            help += "Pour l'aventure courante : "\
+                "\n\t- `!resume` pour revoir l'affiche et les indices de l'épreuve courante"\
+                "\n\t- `!indice` pour obtenir un nouvel indice sur l'épreuve courante"\
+                "\n\t- `!solution [solution]` pour me proposer une solution (insensible à la casse et aux accents). Par exemple `\!solution Master Cryptis\`"
+        
+        if user and user.isAdmin():
+            help += "Pour les administrateurs :"\
+                "\n\t- `!ban [id]` pour bannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `!unban [id]` pour débannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `!show [id]` pour afficher les informations d'un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `!reset [id]` pour réinitialiser un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
+                "\n\t- `!resetEvent [code]` pour réinitialiser un événement (le code est le code de l'événement, par exemple `\!resetEvent 1\` pour réinitialiser l'événement 1)"
 
-        else:
-            help += "\n\nVoici comment communiquer avec moi :"\
-                "\n\t- `'!start [code]'` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"\
-                "\n\t- `'!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
-                "\n\t- `'!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
-                "\n\t- `'!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
-                "\n\t- `'!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"\
-                "\n\t- `'!help'` pour revoir ces informations"
-        
         return help
 
 if __name__ == "__main__":

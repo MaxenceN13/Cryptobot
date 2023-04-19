@@ -33,7 +33,7 @@ class User:
         event["finished"] = True
         self.current_event_code = None
 
-        return (round(temps_total/60.0, 2), sum(event["hint_used"]))
+        return (round(temps_total/60.0), sum(event["hint_used"]))
     
     def finishedEvent(self, event_code):
         return event_code in self.events.keys() and self.events[event_code]["finished"]
@@ -63,7 +63,7 @@ class User:
         event["current_run"] += 1
         event["hint_used"].append(0)
 
-        return (round(temps_affiche/60.0, 2), event["hint_used"][-2])
+        return (round(temps_affiche/60.0), event["hint_used"][-2])
     
     def getNbHintUsed(self):
         return self.events[self.current_event_code]["hint_used"][self.getCurrentRun()]
