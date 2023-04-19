@@ -285,14 +285,16 @@ class MyClient(discord.Client):
         return hint
     
     def getHelp(self, user):
+        help = ""
         if user and user.current_event_code != None:
-            return "Voici comment communiquer avec moi :"\
+            help += "Voici comment communiquer avec moi :"\
                 "\n\t- `'!help'` pour revoir ces informations"\
                 "\n\t- `'!resume'` pour revoir l'affiche et les indices de l'épreuve courante"\
                 "\n\t- `'!indice'` pour obtenir un nouvel indice sur l'épreuve courante"\
                 "\n\t- `'!solution [solution]'` pour me proposer une solution (je suis insensible à la casse et aux accents), par exemple `\"!solution Master Cryptis\"`"
+        
         elif user and user.isAdmin():
-            return "Voici comment communiquer avec moi :"\
+            help += "Voici les commandes administrateurs :"\
                 "\n\t- `'!help'` pour revoir ces informations"\
                 "\n\t- `'!ban [id]'` pour bannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
                 "\n\t- `'!unban [id]'` pour débannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
@@ -301,13 +303,15 @@ class MyClient(discord.Client):
                 "\n\t- `'!resetEvent [code]'` pour réinitialiser un événement (le code est le code de l'événement, par exemple `\"!resetEvent 1\"` pour réinitialiser l'événement 1)"
 
         else:
-            return "\n\nVoici comment communiquer avec moi :"\
+            help += "\n\nVoici comment communiquer avec moi :"\
                 "\n\t- `'!start [code]'` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"\
                 "\n\t- `'!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
                 "\n\t- `'!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
                 "\n\t- `'!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
                 "\n\t- `'!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"\
                 "\n\t- `'!help'` pour revoir ces informations"
+        
+        return help
 
 if __name__ == "__main__":
     db_path = "users.json"
