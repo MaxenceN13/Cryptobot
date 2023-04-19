@@ -156,7 +156,21 @@ class MyClient(discord.Client):
                     await message.channel.send("\"{}\" n'est pas la bonne solution.".format(solution))
             
             elif message.content.startswith("!epreuve2 ") or message.content == "!epreuve2":
-                await message.channel.send("La mini-épreuve n°2 sera disponible le mercredi 19")
+                solution = message.content[10:].lower().strip()
+                
+                if solution == "":
+                    await message.channel.send("Tu n'as pas proposé de solution.")
+                
+                elif user.mini_epreuve[1] == 1:
+                    await message.channel.send("Tu as déjà trouvé la bonne solution pour la mini-épreuve n°2.")
+
+                elif solution == "starship":
+                    await message.channel.send("Bravo ! Tu as trouvé la bonne solution pour la mini-épreuve n°2.\nLa première partie de la suite de l'url est : 'spJ1l'")
+                    await self.channel_feedback_miniepreuve.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve n°2.".format(message))
+                    user.mini_epreuve[1] = 1
+                    users.save()
+                else:
+                    await message.channel.send("\"{}\" n'est pas la bonne solution.".format(solution))
             
             elif message.content.startswith("!epreuve3 ") or message.content == "!epreuve3":
                 await message.channel.send("La mini-épreuve n°3 sera disponible le mercredi 26")
