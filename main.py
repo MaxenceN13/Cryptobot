@@ -290,25 +290,26 @@ class MyClient(discord.Client):
                 "\n\t- `!epreuve1 [solution]` pour me proposer une solution à la mini-épreuve 1"\
                 "\n\t- `!epreuve2 [solution]` pour me proposer une solution à la mini-épreuve 2"\
                 "\n\t- `!epreuve3 [solution]` pour me proposer une solution à la mini-épreuve 3"\
-                "\n\t- `!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale"
+                "\n\t- `!epreuvef [solution]` pour me proposer une solution à la mini-épreuve finale\n"
         
-        if user and user.current_event_code != None:
-            help += "\n\t- `!start [code]` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)"
+        if user and user.current_event_code == None:
+            help += "\n\t- `!start [code]` pour commencer l'aventure (le code d'accès sera délivré le 29 avril)\n"
                 
         
         if user and user.current_event_code != None:
             help += "Pour l'aventure courante : "\
                 "\n\t- `!resume` pour revoir l'affiche et les indices de l'épreuve courante"\
                 "\n\t- `!indice` pour obtenir un nouvel indice sur l'épreuve courante"\
-                "\n\t- `!solution [solution]` pour me proposer une solution (insensible à la casse et aux accents). Par exemple `\!solution Master Cryptis\`"
+                "\n\t- `!solution [solution]` pour me proposer une solution (insensible à la casse et aux accents). Par exemple `!solution Master Cryptis`\n"
         
         if user and user.isAdmin():
             help += "Pour les administrateurs :"\
-                "\n\t- `!ban [id]` pour bannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `!unban [id]` pour débannir un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `!show [id]` pour afficher les informations d'un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `!reset [id]` pour réinitialiser un utilisateur (l'ID est le nombre qui suit le @ dans son pseudo)"\
-                "\n\t- `!resetEvent [code]` pour réinitialiser un événement (le code est le code de l'événement, par exemple `\!resetEvent 1\` pour réinitialiser l'événement 1)"
+                "\n\t- `!ban [id]` pour bannir un utilisateur"\
+                "\n\t- `!unban [id]` pour débannir un utilisateur"\
+                "\n\t- `!show [id]` pour afficher les informations d'un utilisateur"\
+                "\n\t- `!reset [id]` pour réinitialiser un utilisateur"\
+                "\n\t- `!reset [id] [code]` pour réinitialiser un utilisateur sur un événement"\
+                "\n\t- `!resetEvent [code]` pour réinitialiser un événement\n"
 
         return help
 
