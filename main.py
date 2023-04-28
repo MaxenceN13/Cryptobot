@@ -198,7 +198,7 @@ class MyClient(discord.Client):
                 elif user.mini_epreuve[3] == 1:
                     await message.channel.send("Tu as déjà trouvé la bonne solution pour la mini-épreuve finale.")
 
-                elif solution == "noir":
+                elif solution == "cryptaventure":
                     await message.channel.send("Bravo ! Tu as trouvé la bonne solution pour la mini-épreuve finale.\nTu participes automatiquement au tirage au sort pour gagner un lot !")
                     await self.channel_feedback_miniepreuve.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve finale.".format(message))
                     user.mini_epreuve[3] = 1
