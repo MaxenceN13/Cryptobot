@@ -173,10 +173,38 @@ class MyClient(discord.Client):
                     await message.channel.send("\"{}\" n'est pas la bonne solution.".format(solution))
             
             elif message.content.startswith("!epreuve3 ") or message.content == "!epreuve3":
-                await message.channel.send("La mini-épreuve n°3 sera disponible le mercredi 26")
+                solution = message.content[10:].lower().strip()
+                
+                if solution == "":
+                    await message.channel.send("Tu n'as pas proposé de solution.")
+                
+                elif user.mini_epreuve[2] == 1:
+                    await message.channel.send("Tu as déjà trouvé la bonne solution pour la mini-épreuve n°3.")
+
+                elif solution == "noir":
+                    await message.channel.send("Bravo ! Tu as trouvé la bonne solution pour la mini-épreuve n°3.\nLa première partie de la suite de l'url est : 'OedTqA'.\nSi tu as les 3 réponses, tu peux reconstituer une url !")
+                    await self.channel_feedback_miniepreuve.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve n°3.".format(message))
+                    user.mini_epreuve[2] = 1
+                    users.save()
+                else:
+                    await message.channel.send("\"{}\" n'est pas la bonne solution.".format(solution))
             
             elif message.content.startswith("!epreuvef ") or message.content == "!epreuvef":
-                await message.channel.send("La mini-épreuve finale sera disponible le mercredi 26")
+                solution = message.content[10:].lower().strip()
+                
+                if solution == "":
+                    await message.channel.send("Tu n'as pas proposé de solution.")
+                
+                elif user.mini_epreuve[3] == 1:
+                    await message.channel.send("Tu as déjà trouvé la bonne solution pour la mini-épreuve finale.")
+
+                elif solution == "noir":
+                    await message.channel.send("Bravo ! Tu as trouvé la bonne solution pour la mini-épreuve finale.\nTu participes automatiquement au tirage au sort pour gagner un lot !")
+                    await self.channel_feedback_miniepreuve.send("Bravo à {0.author.mention} qui a trouvé la bonne solution pour la mini-épreuve finale.".format(message))
+                    user.mini_epreuve[3] = 1
+                    users.save()
+                else:
+                    await message.channel.send("\"{}\" n'est pas la bonne solution.".format(solution))
 
             elif message.content.startswith("!maintenance ") and user.isAdmin():
                 if message.content[13:] == "start":
